@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RED Search</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #1a1a1a, #0d0d0d, #2a2a2a);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      text-align: center;
+      backdrop-filter: blur(8px);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .logo {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      width: 80px;
+      height: auto;
+    }
+
+    .history-icon {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: white;
+    }
+
+    .history-dropdown {
+      position: absolute;
+      top: 3.5rem;
+      right: 1rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      backdrop-filter: blur(6px);
+      display: none;
+      text-align: left;
+      z-index: 10;
+    }
+
+    .history-dropdown.visible {
+      display: block;
+    }
+
+    .history-item {
+      margin: 0.25rem 0;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .engine-switcher {
+      margin-bottom: 1.5rem;
+    }
+
+    select {
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: none;
+      outline: none;
+      backdrop-filter: blur(4px);
+    }
+
+    select option {
+      color: black;
+    }
+
+    .quicklinks {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .quicklink {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      color: white;
+      font-size: 1.2rem;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .quicklink:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    form {
+      position: relative;
+      width: 300px;
+      margin-bottom: 1rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem 1.2rem;
+      border: none;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      outline: none;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input[type="text"]::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+
+    input[type="text"]:focus {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 25px rgba(0,0,0,0.6);
+    }
+
+    button {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <img src="logo.png" alt="Logo" class="logo" />
+    <i class="fas fa-history history-icon" id="historyToggle"></i>
+    <div class="history-dropdown" id="historyDropdown"></div>
+
+    <div class="engine-switcher">
+      <select id="engineSelect">
+        <option value="https://searx.be?q=">Searx</option>
+        <option value="https://html.duckduckgo.com/html?q=" selected>DuckDuckGo</option>
+        <option value="https://www.google.com/search?q=">Google</option>
+        <option value="https://www.startpage.com/do/search?q=">Startpage</option>
+        <option value="https://www.qwant.com/?q=">Qwant</option>
+      </select>
+    </div>
+
+    <div class="quicklinks">
+      <a href="https://poki.com" class="quicklink" title="Poki"><i class="fas fa-gamepad"></i></a>
+      <a href="https://youtube.com" class="quicklink" title="YouTube"><i class="fab fa-youtube"></i></a>
+      <a href="https://github.com" class="quicklink" title="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://crazygames.com" class="quicklink" title="CrazyGames"><i class="fas fa-ghost"></i></a>
+      <a href="https://c.ai" class="quicklink" title="Character.AI"><i class="fas fa-comment-dots"></i></a>      
+    </div>
+
+    <form id="searchForm">
+      <input type="text" name="q" id="searchInput" placeholder="Search…" required autocomplete="off" />
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('searchInput');
+      const form = document.getElementById('searchForm');
+      const engineSelect = document.getElementById('engineSelect');
+      const historyToggle = document.getElementById('historyToggle');
+      const historyDropdown = document.getElementById('historyDropdown');
+
+      input.focus();
+
+      const updateHistoryDropdown = () => {
+        historyDropdown.innerHTML = '';
+        const history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+        if (history.length === 0) {
+          historyDropdown.innerHTML = '<div class="history-item">No history</div>';
+        } else {
+          history.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'history-item';
+            div.textContent = item;
+            div.addEventListener('click', () => {
+              input.value = item;
+              historyDropdown.classList.remove('visible');
+              input.focus();
+            });
+            historyDropdown.appendChild(div);
+          });
+        }
+      };
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const query = input.value.trim();
+        const engine = engineSelect.value;
+        if (query) {
+          let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+          if (!history.includes(query)) {
+            history.unshift(query);
+            if (history.length > 20) history.pop();
+            localStorage.setItem('searchHistory', JSON.stringify(history));
+          }
+          window.location.href = `${engine}${encodeURIComponent(query)}`;
+        }
+      });
+
+      historyToggle.addEventListener('click', () => {
+        historyDropdown.classList.toggle('visible');
+        updateHistoryDropdown();
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!historyDropdown.contains(e.target) && e.target !== historyToggle) {
+          historyDropdown.classList.remove('visible');
+        }
+      });
+    });
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e08fcfbffe62d85',t:'MTc3NDIyMjI2OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"d384f854ddaa452b810563f4b386c986","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
